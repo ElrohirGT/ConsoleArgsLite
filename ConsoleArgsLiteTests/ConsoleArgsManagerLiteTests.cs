@@ -56,5 +56,13 @@ namespace ConsoleArgsLiteTests
         }
         #endregion
         
+        [Fact]
+        public void CannotHave2ArgumentsWithTheSameName()
+        {
+            ConsoleArgsManagerLite manager = new ConsoleArgsManagerLite();
+            manager.AddArgument("output");
+
+            Assert.Throws<ArgumentException>(() => manager.AddArgument("output"));
+        }
     }
 }
