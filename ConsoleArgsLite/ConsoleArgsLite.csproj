@@ -4,6 +4,8 @@
     <TargetFramework>net5.0</TargetFramework>
     <Authors>ElrohirGT</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RepositoryType>Git</RepositoryType>
+    <RepositoryUrl>https://github.com/ElrohirGT/ConsoleArgsLite</RepositoryUrl>
   </PropertyGroup>
 
 </Project>
