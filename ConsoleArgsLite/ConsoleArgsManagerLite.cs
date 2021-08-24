@@ -5,7 +5,7 @@ namespace ConsoleArgsLite
 {
     public class ConsoleArgsManagerLite
     {
-        private Dictionary<string, KeyValuePair<Type, ConsoleArg<object>>> _arguments = new Dictionary<string, KeyValuePair<Type, ConsoleArg<object>>>();
+        private Dictionary<string, ConsoleArg<object>> _arguments = new Dictionary<string, ConsoleArg<object>>();
 
         /// <summary>
         /// Adds a string argument.
@@ -27,7 +27,7 @@ namespace ConsoleArgsLite
         public void AddArgument<T>(string name, bool required, Func<string, T> parser, string consoleName = null)
         {
             Func<string, object> converter = (s) => parser(s);
-            _arguments.Add(name, KeyValuePair.Create(typeof(T), new ConsoleArg<object>(name, converter, required, consoleName)));
+            _arguments.Add(name, new ConsoleArg<object>(name, converter, required, consoleName));
         }
 
         /// <summary>
@@ -37,17 +37,17 @@ namespace ConsoleArgsLite
         /// <typeparam name="T">The type of the value to get.</typeparam>
         /// <param name="name">The name of the argument to get.</param>
         /// <returns>The parsed value or null if it has not been parsed yet.</returns>
-        public T GetValueFromArgument<T>(string name) => (T) _arguments[name].Value.Value;
+        public T GetValueFromArgument<T>(string name) => (T) _arguments[name].Value;
 
         public void ParseArguments(string[] args)
         {
             int currentArgsIndex = 0;
-            foreach (var keyValuePair in _arguments.Values)
+            foreach (var argument in _arguments.Values)
             {
                 if (currentArgsIndex < args.Length)
-                    ParseArgument(keyValuePair.Value, args, ref currentArgsIndex);
-                else if (keyValuePair.Value.Required)
-                    throw new ArgumentNullException(keyValuePair.Value.Name);
+                    ParseArgument(argument, args, ref currentArgsIndex);
+                else if (argument.Required)
+                    throw new ArgumentNullException(argument.Name);
             }
         }
 
