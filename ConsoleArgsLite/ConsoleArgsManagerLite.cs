@@ -17,6 +17,7 @@ namespace ConsoleArgsLite
 
         /// <summary>
         /// Adds an argument of type <typeparamref name="T"/>.
+        /// It is recommended that you use nullable types for value types like integers.
         /// </summary>
         /// <typeparam name="T">The type of the argument.</typeparam>
         /// <param name="name">The name of the argument, this value must be unique.</param>
@@ -29,6 +30,13 @@ namespace ConsoleArgsLite
             _arguments.Add(KeyValuePair.Create(typeof(T), new ConsoleArg<object>(name, converter, required, consoleName)));
         }
 
+        /// <summary>
+        /// Attemps the parsed value of an argument.
+        /// It is recommended that you use nullable types for value types like integers.
+        /// </summary>
+        /// <typeparam name="T">The type of the value to get.</typeparam>
+        /// <param name="Name">The name of the argument to get.</param>
+        /// <returns>The parsed value or null if it has not been parsed yet.</returns>
         public T GetValueFromArgument<T>(string Name) => (T)_arguments.Find((v) => v.Value?.Name == Name).Value?.Value;
 
         public void ParseArguments(string[] args)
