@@ -60,3 +60,38 @@ public void main(string[] args)
 
 //Outputs: 100
 ```
+
+You can add various arguments, the order is important, especially if you're going to use some that are not required.
+> app.exe input.mp4 output.mp4 --CRF 30
+
+> app.exe input.mp4 output.mp4
+```csharp
+
+public void main(string[] args)
+{
+  ConsoleArgsManagerLite manager = new ConsoleArgsManagerLite();
+  manager.AddArgument("inputFile");
+  manager.AddArgument("outputFile");
+  manager.AddArgument<int?>(
+    name: "crf",
+    required: false,
+    parser: (s) =>
+    {
+        if (string.IsNullOrEmpty(s) || string.IsNullOrWhiteSpace(s))
+            return null;
+        return int.Parse(s);
+    },
+    consoleName: "consoleName"
+  );
+
+  manager.ParseArguments(args);
+  string outputFile = manager.GetValueFromArgument<string>("outputFile");
+  string inputFile = manager.GetValueFromArgument<string>("inputFile");
+  int? crf = manager.GetValueFromArgument<int?>("crf");
+  
+  Console.WriteLine($"{inputFile}->{outputFile}: {crf ?? ''}");
+}
+
+//Outputs: input.mp4->output.mp4: 30
+//Outputs: input.mp4->output.mp4: 
+```
